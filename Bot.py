@@ -8,9 +8,14 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 token = '7c5ce0d5dfeb8c3104d522c567b5910c185a98c937cd0f400db699b6745e32a00e65c28691a134ace8a05'
 vk_session = vk_api.VkApi(token=token)
 longpoll = VkLongPoll(vk_session)
-greeting_lst = ['привет','хеллоу','здарова','вассап','здрасте','приветик','начать','Салом алейкум'
+greeting_lst = ['привет','хеллоу','здарова','вассап','здрасте','приветик','Салом алейкум',
                 'здравствуйте','добрый день','доброе утро','здравствуй']
 print("Бот запущен")
+
+def rand_word():
+    word = random.choice(greeting_lst)
+    word = word.title()
+    return word
 
 def open_in(x):
     f = open(x, 'r', encoding='Utf-8')
@@ -20,7 +25,10 @@ def open_in(x):
 
 def create_keyboard(response):
     keyboard = VkKeyboard(one_time=False)
-    if response == 'начать':
+    if response == 'начать' or response == 'привет' or response == 'хеллоу' or response == 'здарова' \
+            or response == 'вассап' or response == 'здрасте' or response == 'приветик' or response == 'начать' or \
+            response == 'Салом алейкум' or response == 'здравствуйте' or response == 'добрый день' or \
+            response == 'доброе утро' or response == 'здравствуй':
         keyboard.add_button('Как стать волонтером? 🙋‍♀', color=VkKeyboardColor.PRIMARY)
         keyboard.add_line()
         keyboard.add_button('Мероприятия 🎟', color=VkKeyboardColor.PRIMARY)
@@ -122,8 +130,11 @@ for event in longpoll.listen():
         keyboard = create_keyboard(response)
 
         if event.from_user and not event.from_me:
-            if response == "начать" :
-                send_message(vk_session, 'user_id', event.user_id, message="Выберите нужный пункт", keyboard=keyboard)
+            if response == 'начать' or response =='привет' or response =='хеллоу' or response =='здарова'\
+                    or response =='вассап' or response =='здрасте' or response =='приветик' or response =='начать' or \
+                    response =='Салом алейкум' or response =='здравствуйте' or response =='добрый день' or \
+                    response =='доброе утро' or response =='здравствуй':
+                send_message(vk_session, 'user_id', event.user_id, message=rand_word() + "." + " Выбери  нужную команду.", keyboard=keyboard)
 
             elif response == "о нас 👩‍💻":
                 send_message(vk_session,'user_id', event.user_id, message=open_in("About.txt"), attachment='photo-197331641_457239017')
